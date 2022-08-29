@@ -44,7 +44,7 @@ class _SurahListPageState extends State<SurahListPage> {
     setState((){
       _loading = true;
     });
-    if(fileExists){
+    if(fileExists && false){
       print("file already exists");
       _get(File(filePath));
     } else {
@@ -95,7 +95,7 @@ class _SurahListPageState extends State<SurahListPage> {
         ),
         body: Column(
             children: [
-              _loading? LinearProgressIndicator(minHeight: 5, value: _percentage >0 ?_percentage: 0,color: Colors.yellow,): Container(),
+              _loading? LinearProgressIndicator(minHeight: 5, value: _percentage >0 ?_percentage: 0,color: Colors.red,): Container(),
               Expanded(
                   child: Container(
                     height: double.infinity,
@@ -117,29 +117,41 @@ class _SurahListPageState extends State<SurahListPage> {
                                     ),
                                     child: Row(
                                       children: [
-                                        SizedBox(
-                                            width: 30,
-                                            child: Text(surah.no)
+                                        Container(
+                                            width: 24,
+                                            height: 24,
+                                            margin: EdgeInsets.only(right: 15),
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(15)),
+                                            child: Text(surah.no, style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),)
                                         ),
-                                        SizedBox(
+                                        Container(
                                             width: 150,
-                                            child: Text(
-                                              surah.name_bn,
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 18,
-                                                  fontFamily: "Kalpurush"
-                                              ),
+                                            alignment: Alignment.centerLeft,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    surah.name_bn,
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 20 ,
+                                                        fontFamily: "Kalpurush"
+                                                    ),
+                                                  ),
+                                                  Text("${surah.total_ayats} আয়াত", style: TextStyle(fontSize: 11))
+                                                ]
                                             )
                                         ),
-                                        Expanded(child: Text("${surah.total_ayats} আয়াত", style: TextStyle(fontSize: 11),)),
-                                        Text(surah.name_ar,
-                                          textAlign: TextAlign.right,
-                                          style: TextStyle(
-                                              color: Theme.of(context).primaryColor,
-                                              fontSize: 28,
-                                              fontFamily: "Al-Qalam Quran"
-                                          ),
+                                        Expanded(
+                                            child:   Text(surah.name_ar,
+                                              textAlign: TextAlign.right,
+                                              style: TextStyle(
+                                                  color: Theme.of(context).primaryColor,
+                                                  fontSize: 24,
+                                                  fontFamily: "Al-Qalam Quran"
+                                              ),
+                                            )
                                         )
                                       ],
                                     )

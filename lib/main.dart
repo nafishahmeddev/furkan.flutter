@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: ThemePrimaryColor,
+        scaffoldBackgroundColor: Color.fromARGB(255, 242, 234, 216)
       ),
       themeMode: ThemeMode.system,
       home: const SurahListPage(),
