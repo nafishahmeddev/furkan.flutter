@@ -7,8 +7,8 @@ class Surah {
   final String no;
   final String total_ayats;
   final String total_ruku;
-  final dynamic videos;
-  final dynamic ayats;
+  final List<SurahVideo> videos;
+  final List<Ayat> ayats;
 
   Surah(this.name_bn, this.name_en, this.name_ar, this.meaning, this.no, this.total_ayats, this.total_ruku, this.videos, this.ayats);
 
