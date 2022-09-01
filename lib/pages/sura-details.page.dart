@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:furkan_flutter/models/ayat.model.dart';
 import 'package:furkan_flutter/models/surah.model.dart';
+import 'package:furkan_flutter/utils/utils.dart';
 class SurahDetailsPage extends StatefulWidget {
   const SurahDetailsPage({Key? key, required this.surah_no, required this.surahs}) : super(key: key);
   final String surah_no;
@@ -56,21 +57,33 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                   },
                   selectedItemBuilder: (BuildContext context) {
                     return _surahs.map((Surah value) {
-                      // return Text(
-                      //   "${_surah.no}. ${_surah.name_en}",
-                      //   style: const TextStyle(color: Colors.white),
-                      // );
-
                       return DropdownMenuItem<String>(
                         value: _surah.no,
-                        child: Container(child: Text("${_surah.no}. ${_surah.name_en}", style: TextStyle(color: Colors.white),)),
+                        child: SizedBox(
+                            child: Text(
+                              "${Utils.toBNNumber(_surah.no)}. ${_surah.name_bn}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "Kalpurush"
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            )
+                        ),
                       );
                     }).toList();
                   },
                   items: _surahs.map((Surah surah) {
                     return DropdownMenuItem<String>(
                       value: surah.no,
-                      child: Container(child: Text("${surah.no}. ${surah.name_en}")),
+                      child: SizedBox(
+                          child: Text(
+                            "${Utils.toBNNumber(surah.no)}. ${surah.name_bn}",
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontFamily: "Kalpurush"
+                            ),
+                          )
+                      ),
                     );
 
                   }).toList()

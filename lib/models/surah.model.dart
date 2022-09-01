@@ -1,4 +1,5 @@
 import 'ayat.model.dart';
+import 'package:html_unescape/html_unescape.dart';
 class Surah {
   final String name_bn;
   final String name_en;
@@ -13,7 +14,7 @@ class Surah {
   Surah(this.name_bn, this.name_en, this.name_ar, this.meaning, this.no, this.total_ayats, this.total_ruku, this.videos, this.ayats);
 
   Surah.fromJson(Map<String, dynamic> json)
-      : name_bn = json['name_bn'],
+      : name_bn = HtmlUnescape().convert(json['name_bn']),
         name_en = json['name_en'],
         name_ar = json['name_ar'],
         meaning = json['meaning'],
