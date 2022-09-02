@@ -134,7 +134,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                                                 children: [
                                                   SizedBox(
                                                       width: 30,
-                                                      child: Text(ayat.ayat_no, style: TextStyle(color: Theme.of(context).primaryColor),)
+                                                      child: Text(Utils.toBNNumber(ayat.ayat_no), style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),)
                                                   ),
                                                   Expanded(
                                                       child: Column(

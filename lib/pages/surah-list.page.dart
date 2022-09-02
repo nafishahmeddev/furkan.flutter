@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:furkan_flutter/models/surah.model.dart';
 import 'package:furkan_flutter/pages/sura-details.page.dart';
 import 'package:furkan_flutter/theme/colors.dart';
+import 'package:furkan_flutter/utils/utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,16 +17,10 @@ class SurahListPage extends StatefulWidget {
 
 class _SurahListPageState extends State<SurahListPage> {
   List<Surah> _surahs = [];
-  bool _loading = false;
-  int _total = 0;
-  int _received = 0;
-  double _percentage = 0;
-  http.Client _client = http.Client();
-
-  Future<void> _get(File file) async {
-    setState((){
-      _loading = false;
-    });
+  Future<void> _get() async {
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    String filePath = "$dir/resources.json";
+    final file = File(filePath);
     Map<String, dynamic> data = jsonDecode(await file.readAsStringSync());
     List<Surah> surahs = List<Surah>.from(data["surahs"].map((dynamic json){
       Map<String, dynamic> surah = Map<String, dynamic>.from(json);
@@ -36,68 +31,11 @@ class _SurahListPageState extends State<SurahListPage> {
       _surahs = surahs;
     });
   }
-  Future<bool> _checkForUpdate() async{
-    try {
-      String dir = (await getApplicationDocumentsDirectory()).path;
-      String filePath = "$dir/resources.json";
-      FileStat fileStat = File(filePath).statSync();
-      int ts = (fileStat.changed.millisecondsSinceEpoch).toInt();
-      var res = await _client.get(Uri.parse("https://webtrackers.co.in/furkan/api/index.php?check_for_update=OK&ts=$ts"));
-      return res.body == "UPDATE_AVAILABLE";
-    } on SocketException catch (_) {
-      return false;
-    }
-  }
-
-  Future<void> _getFile() async{
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    String filePath = "$dir/resources.json";
-    print(filePath);
-    bool fileExists = await File(filePath).existsSync();
-    setState((){
-      _loading = true;
-    });
-    if(fileExists && ! await _checkForUpdate()){
-      print("file already exists");
-      _get(File(filePath));
-    } else {
-      print("downloading files");
-      try {
-        var d = await File(filePath);
-        await d.delete();
-        print("file deleted");
-      } catch(e){
-        print(e);
-      }
-      
-      http.Request request = http.Request("GET", Uri.parse("https://webtrackers.co.in/furkan/api/json.php"));
-      http.StreamedResponse response = await _client.send(request);
-      setState((){
-        _total = response.contentLength??0;
-        _received = 0;
-        _percentage= 0;
-      });
-
-      final List<int> bytes = [];
-      response.stream.listen((value) {
-        setState(() {
-          bytes.addAll(value);
-          _received += value.length;
-          _percentage = (_received/_total)*100;
-        });
-      }).onDone(() async {
-        final file = File(filePath);
-        await file.writeAsBytes(bytes);
-        _get(file);
-      });
-    }
-  }
-
   @protected
   @mustCallSuper
   void initState() {
     super.initState();
-    _getFile();
+    _get();
   }
 
   @override
@@ -110,7 +48,6 @@ class _SurahListPageState extends State<SurahListPage> {
       ),
       body: Column(
           children: [
-            _loading? LinearProgressIndicator(minHeight: 5, value: _percentage >0 ?_percentage: 0,color: Colors.red,): Container(),
             Expanded(
                 child: Container(
                     height: double.infinity,
@@ -153,7 +90,7 @@ class _SurahListPageState extends State<SurahListPage> {
                                                     margin: EdgeInsets.only(right: 15),
                                                     alignment: Alignment.center,
                                                     decoration: BoxDecoration(color: ThemePrimaryColor[400], borderRadius: BorderRadius.circular(15)),
-                                                    child: Text(surah.no, style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),)
+                                                    child: Text(Utils.toBNNumber(surah.no), style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),)
                                                 ),
                                                 Container(
                                                     width: 150,

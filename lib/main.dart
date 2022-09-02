@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:furkan_flutter/pages/splash.page.dart';
 import 'package:furkan_flutter/pages/surah-list.page.dart';
 import 'package:furkan_flutter/theme/colors.dart';
 
@@ -23,8 +24,9 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Color.fromARGB(255, 242, 234, 216)
       ),
       themeMode: ThemeMode.system,
-      home: const SurahListPage(),
+      home: const SplashPage(),
     );
   }
 }
+
 
