@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="furkan_flutter"
-        android:name="${applicationName}"
+        android:name="Furkan"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
