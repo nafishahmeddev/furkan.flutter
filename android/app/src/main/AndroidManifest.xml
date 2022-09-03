@@ -2,8 +2,8 @@
     package="in.co.webtrackers.furkan.app.furkan_flutter">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="furkan_flutter"
-        android:name="Furkan"
+        android:label="Furkan"
+        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
