@@ -9,6 +9,9 @@ import 'package:furkan_flutter/utils/utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/todo.model.dart';
+import '../utils/db-provider.dart';
+
 class SurahListPage extends StatefulWidget {
   const SurahListPage({Key? key}) : super(key: key);
   @override
@@ -31,6 +34,17 @@ class _SurahListPageState extends State<SurahListPage> {
       _surahs = surahs;
     });
   }
+
+  newClient(Todo newClient) async {
+    final dbProvider = DBProvider();
+    final db = await dbProvider.database;
+    var res = await db?.rawInsert(
+        "INSERT Into Client (id,first_name)"
+            " VALUES (NULL,'${newClient.firstName}')");
+    print(res);
+    return res;
+  }
+
   @protected
   @mustCallSuper
   void initState() {
@@ -40,6 +54,7 @@ class _SurahListPageState extends State<SurahListPage> {
 
   @override
   Widget build(BuildContext context) {
+    newClient(new Todo(id: 1, firstName: "nafish", lastName: 'ahmhed', blocked: false));
     return Scaffold(
       appBar: AppBar(
         title: Text("Furkan"),

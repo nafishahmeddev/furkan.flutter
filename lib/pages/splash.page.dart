@@ -83,7 +83,6 @@ class _SplashPageState extends State<SplashPage> {
       });
     }
   }
-
   _gotoListing(){
     Navigator.pushReplacement(
       context,
