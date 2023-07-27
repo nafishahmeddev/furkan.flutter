@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:furkan_flutter/models/ayat.model.dart';
 import 'package:furkan_flutter/models/surah.model.dart';
 import 'package:furkan_flutter/utils/utils.dart';
+import 'package:furkan_flutter/widgets/video_player.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 class SurahDetailsPage extends StatefulWidget {
   const SurahDetailsPage({Key? key, required this.surah_no, required this.surahs}) : super(key: key);
   final String surah_no;
@@ -14,8 +16,15 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
   String _surah_no = "";
   List<Surah> _surahs = [];
   late Surah  _surah;
-  @protected
-  @mustCallSuper
+  final YoutubePlayerController _video_controller = YoutubePlayerController(
+    params: const YoutubePlayerParams(
+      mute: false,
+      showControls: true,
+      showFullscreenButton: true,
+    ),
+  );
+  bool _isVideoVisible = true;
+  @override
   void initState() {
     super.initState();
     setState((){
@@ -28,6 +37,20 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
     setState(() {
       _surah_no = surahNo;
       _surah = _surahs.firstWhere((element) => element.no == _surah_no);
+      if(_surah.videos.isNotEmpty) {
+        if (_isVideoVisible) {
+          _video_controller.loadVideoById(
+              videoId: _surah.videos[0].yt_video_id);
+          _video_controller.playVideo();
+        } else {
+          _video_controller.loadVideoById(
+              videoId: _surah.videos[0].yt_video_id);
+          _video_controller.pauseVideo();
+        }
+      } else {
+        _video_controller.close();
+      }
+
     });
   }
   nextSurah(){
@@ -41,6 +64,26 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
     if(prev >= 1) {
       changeSurah(prev.toString());
     }
+  }
+
+  toggleVideo(){
+    setState(() {
+      if(_isVideoVisible){
+        _isVideoVisible = false;
+        _video_controller.playVideo();
+      } else {
+        _isVideoVisible = true;
+        _video_controller.pauseVideo();
+      }
+    });
+
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _video_controller.close();
+    super.dispose();
   }
 
   @override
@@ -99,14 +142,13 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
       ),
       body: _surah != null?Column(
           children: [
+            VideoPlayer(controller: _video_controller, videos: _surah.videos),
             Expanded(
                 child: ListView.separated(
                   itemCount: _surah.ayats.length,
                   itemBuilder: (BuildContext context, int index) {
                     Ayat ayat = _surah.ayats[index];
-                    return InkWell(
-                              onTap: (){},
-                              child: Column(
+                    return Column(
                                   children: [
                                     Container(
                                         padding: const EdgeInsets.symmetric(
@@ -154,8 +196,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                                         )
                                     ),
                                   ]
-                              ),
-                            );
+                              );
                   },
                   separatorBuilder: (BuildContext context, index){
                     return Container(
