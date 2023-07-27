@@ -62,7 +62,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                         child: SizedBox(
                             child: Text(
                               "${Utils.toBNNumber(_surah.no)}. ${_surah.name_bn}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.white,
                                   fontFamily: "Kalpurush"
                               ),
@@ -79,7 +79,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                           child: Text(
                             "${Utils.toBNNumber(surah.no)}. ${surah.name_bn}",
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: "Kalpurush"
                             ),
                           )
@@ -90,8 +90,8 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
               )
           ),
           actions: [
-            IconButton(onPressed: prevSurah, icon: Icon(Icons.chevron_left)),
-            IconButton(onPressed: nextSurah, icon: Icon(Icons.chevron_right)),
+            IconButton(onPressed: prevSurah, icon: const Icon(Icons.chevron_left)),
+            IconButton(onPressed: nextSurah, icon: const Icon(Icons.chevron_right)),
           ],
           elevation: 0,
           centerTitle: true,
@@ -102,7 +102,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
             child: Container(
               decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(16),
                     topRight: Radius.circular(16),
                   )
@@ -111,7 +111,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                   Expanded(
                       child: ListView.builder(
                         itemCount: _surah.ayats.length,
-                        padding: EdgeInsets.only(top: 15),
+                        padding: const EdgeInsets.only(top: 15),
                         itemBuilder: (BuildContext context, int index) {
                           Ayat ayat = _surah.ayats[index];
                           return Container(

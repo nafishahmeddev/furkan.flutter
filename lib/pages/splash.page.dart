@@ -13,7 +13,6 @@ class SplashPage extends StatefulWidget{
 }
 
 class _SplashPageState extends State<SplashPage> {
-  bool _loading = false;
   int _total = 0;
   int _received = 0;
   double? _percentage = 0;
@@ -36,28 +35,23 @@ class _SplashPageState extends State<SplashPage> {
   Future<void> _getFile() async{
     String dir = (await getApplicationDocumentsDirectory()).path;
     String filePath = "$dir/resources.json";
-    print(filePath);
-    bool fileExists = await File(filePath).existsSync();
+    bool fileExists = File(filePath).existsSync();
     setState((){
       setState(() {
         _percentage = null;
       });
     });
     if(fileExists && ! await _checkForUpdate()){
-      print("file already exists");
-      print("file exist");
-      Timer.periodic(Duration(seconds: 3), (timer) {
+      Timer.periodic(const Duration(seconds: 3), (timer) {
         _gotoListing();
       });
 
     } else {
-      print("downloading files");
       try {
-        var d = await File(filePath);
+        var d = File(filePath);
         await d.delete();
-        print("file deleted");
       } catch(e){
-        print(e);
+        debugPrint("Error while deleting file");
       }
 
       http.Request request = http.Request("GET", Uri.parse("https://webtrackers.co.in/furkan/api/json.php"));
@@ -78,7 +72,6 @@ class _SplashPageState extends State<SplashPage> {
       }).onDone(() async {
         final file = File(filePath);
         await file.writeAsBytes(bytes);
-        print("file downloaded");
         _gotoListing();
       });
     }
@@ -109,10 +102,10 @@ class _SplashPageState extends State<SplashPage> {
                 height: 100,
                 child: Column(
                   children: [
-                    Text("Furkan", style: TextStyle(color: Colors.white, fontSize: 26),),
+                    const Text("Furkan", style: TextStyle(color: Colors.white, fontSize: 26),),
                     Container(
                         width: 90,
-                        margin: EdgeInsets.only(top:20),
+                        margin: const EdgeInsets.only(top:20),
                         child:  LinearProgressIndicator(color: Colors.white,  value: _percentage, backgroundColor: Colors.transparent,)
                     ),
                   ],
