@@ -16,7 +16,7 @@ class _SplashPageState extends State<SplashPage> {
   int _total = 0;
   int _received = 0;
   double? _percentage = 0;
-  http.Client _client = http.Client();
+  final http.Client _client = http.Client();
 
 
   Future<bool> _checkForUpdate() async{

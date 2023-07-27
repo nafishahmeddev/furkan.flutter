@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:furkan_flutter/models/surah.model.dart';
 import 'package:furkan_flutter/pages/sura-details.page.dart';
 import 'package:furkan_flutter/theme/colors.dart';
 import 'package:furkan_flutter/utils/utils.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as http;
 
 import '../models/todo.model.dart';
 import '../utils/db-provider.dart';
@@ -54,101 +52,55 @@ class _SurahListPageState extends State<SurahListPage> {
 
   @override
   Widget build(BuildContext context) {
-    newClient(new Todo(id: 1, firstName: "nafish", lastName: 'ahmhed', blocked: false));
     return Scaffold(
       appBar: AppBar(
-        title: Text("Furkan"),
+        title: const Text("Furkan", style: TextStyle(color: Colors.white),),
         centerTitle: true,
-        elevation: 0,
       ),
-      body: Column(
-          children: [
-            Expanded(
-                child: Container(
-                    height: double.infinity,
-                    color: Theme.of(context).primaryColor,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16),
-                        )
-                      ),
-                      child: ListView.builder(
-                        padding: EdgeInsets.only(top: 15),
-                        itemCount: _surahs.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          Surah surah = _surahs[index];
-                          return Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
-                            child: Material(
-                                elevation: 5,
-                                borderRadius: BorderRadius.circular((8)),
-                                child: InkWell(
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SurahDetailsPage(surah_no: surah.no, surahs: _surahs,)));
-                                  },
-
-                                  child: Column(
-                                      children: [
-                                        Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 6.00,
-                                                horizontal: 15.00
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                    width: 24,
-                                                    height: 24,
-                                                    margin: EdgeInsets.only(right: 15),
-                                                    alignment: Alignment.center,
-                                                    decoration: BoxDecoration(color: ThemePrimaryColor[400], borderRadius: BorderRadius.circular(15)),
-                                                    child: Text(Utils.toBNNumber(surah.no), style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),)
-                                                ),
-                                                Container(
-                                                    width: 150,
-                                                    alignment: Alignment.centerLeft,
-                                                    child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text(
-                                                            surah.name_bn,
-                                                            style: const TextStyle(
-                                                                color: Colors.black,
-                                                                fontSize: 20 ,
-                                                                fontFamily: "Kalpurush"
-                                                            ),
-                                                          ),
-                                                          Text("${surah.total_ayats} আয়াত", style: TextStyle(fontSize: 11))
-                                                        ]
-                                                    )
-                                                ),
-                                                Expanded(
-                                                    child:   Text(surah.name_ar,
-                                                      textAlign: TextAlign.right,
-                                                      style: TextStyle(
-                                                          color: Theme.of(context).primaryColor,
-                                                          fontSize: 24,
-                                                          fontFamily: "Al-Qalam Quran"
-                                                      ),
-                                                    )
-                                                )
-                                              ],
-                                            )
-                                        ),
-                                      ]
-                                  ),
-                                )
-                            ),
-                          );
-                        },
-                      ),
-                    )
-                )
-            )
-          ]
+      body: ListView.separated(
+        itemCount: _surahs.length,
+        itemBuilder: (BuildContext context, int index) {
+          Surah surah = _surahs[index];
+          return ListTile(
+            dense: true,
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>SurahDetailsPage(surah_no: surah.no, surahs: _surahs,)));
+            },
+            leading: Container(
+                width: 24,
+                height: 24,
+                margin: const EdgeInsets.only(right: 15),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(color: ThemePrimaryColor[400], borderRadius: BorderRadius.circular(15)),
+                child: Text(Utils.toBNNumber(surah.no), style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),)
+            ),
+            title: Text(
+              surah.name_bn,
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20 ,
+                  fontFamily: "Kalpurush"
+              ),
+            ),
+            subtitle:Text("${surah.total_ayats} আয়াত", style: const TextStyle(fontSize: 11)),
+            trailing: Text(surah.name_ar,
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 24,
+                  fontFamily: "Al-Qalam Quran"
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (BuildContext context, index){
+          return Container(
+            margin: const EdgeInsets.only(left: 60, right: 15),
+            height: 1,
+            width: double.infinity,
+            color: Colors.grey.withOpacity(0.3),
+          );
+        },
       ),
     );
   }

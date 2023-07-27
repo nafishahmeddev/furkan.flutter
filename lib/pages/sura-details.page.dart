@@ -46,140 +46,129 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                  iconEnabledColor: Colors.white,
-                  iconDisabledColor: Colors.grey,
-                  value: _surah_no,
-                  onChanged: (value) {
-                    changeSurah(value.toString());
-                  },
-                  selectedItemBuilder: (BuildContext context) {
-                    return _surahs.map((Surah value) {
-                      return DropdownMenuItem<String>(
-                        value: _surah.no,
-                        child: SizedBox(
-                            child: Text(
-                              "${Utils.toBNNumber(_surah.no)}. ${_surah.name_bn}",
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: "Kalpurush"
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            )
-                        ),
-                      );
-                    }).toList();
-                  },
-                  items: _surahs.map((Surah surah) {
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: DropdownButtonHideUnderline(
+            child: DropdownButton(
+                iconEnabledColor: Colors.white,
+                iconDisabledColor: Colors.grey,
+                value: _surah_no,
+                onChanged: (value) {
+                  changeSurah(value.toString());
+                },
+                selectedItemBuilder: (BuildContext context) {
+                  return _surahs.map((Surah value) {
                     return DropdownMenuItem<String>(
-                      value: surah.no,
+                      value: _surah.no,
                       child: SizedBox(
                           child: Text(
-                            "${Utils.toBNNumber(surah.no)}. ${surah.name_bn}",
-                            overflow: TextOverflow.ellipsis,
+                            "${Utils.toBNNumber(_surah.no)}. ${_surah.name_bn}",
                             style: const TextStyle(
+                                color: Colors.white,
                                 fontFamily: "Kalpurush"
                             ),
+                            overflow: TextOverflow.ellipsis,
                           )
                       ),
                     );
+                  }).toList();
+                },
+                items: _surahs.map((Surah surah) {
+                  return DropdownMenuItem<String>(
+                    value: surah.no,
+                    child: SizedBox(
+                        child: Text(
+                          "${Utils.toBNNumber(surah.no)}. ${surah.name_bn}",
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontFamily: "Kalpurush"
+                          ),
+                        )
+                    ),
+                  );
 
-                  }).toList()
-              )
-          ),
-          actions: [
-            IconButton(onPressed: prevSurah, icon: const Icon(Icons.chevron_left)),
-            IconButton(onPressed: nextSurah, icon: const Icon(Icons.chevron_right)),
-          ],
-          elevation: 0,
-          centerTitle: true,
-        ),
-        body:Container(
-            height: double.infinity,
-            color: Theme.of(context).primaryColor,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                  )
-              ),child: _surah != null?Column(
-                children: [
-                  Expanded(
-                      child: ListView.builder(
-                        itemCount: _surah.ayats.length,
-                        padding: const EdgeInsets.only(top: 15),
-                        itemBuilder: (BuildContext context, int index) {
-                          Ayat ayat = _surah.ayats[index];
-                          return Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
-                              child: Material(
-                                  elevation: 5,
-                                  borderRadius: BorderRadius.circular((8)),
-                                  child:InkWell(
-                                    onTap: (){},
-                                    child: Column(
-                                        children: [
-                                          Container(
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical: 15.00,
-                                                  horizontal: 15.00
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                      width: 30,
-                                                      child: Text(Utils.toBNNumber(ayat.ayat_no), style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),)
-                                                  ),
-                                                  Expanded(
-                                                      child: Column(
-                                                        children: [
-                                                          SizedBox(
-                                                              width: double.infinity,
-                                                              child:Text(ayat.text_ar,
-                                                                textAlign: TextAlign.right,
-                                                                style: TextStyle(
-                                                                    color: Theme.of(context).primaryColor,
-                                                                    fontSize: 24,
-                                                                    fontFamily: "Al-Qalam Quran"
-                                                                ),
-                                                              )
-                                                          ),
-                                                          SizedBox(
-                                                              width: double.infinity,
-                                                              child: Text(
-                                                                ayat.text_bn,
-                                                                style: const TextStyle(
-                                                                    color: Colors.black,
-                                                                    fontSize: 18,
-                                                                    fontFamily: "Kalpurush"
-                                                                ),
-                                                              )
-                                                          ),
-
-                                                        ],
-                                                      )
-                                                  )
-                                                ],
-                                              )
-                                          ),
-                                        ]
-                                    ),
-                                  )
-                              )
-                          );
-                        },
-                      )
-                  )
-                ]
-            ):const Text("Nothing to show"),
+                }).toList()
             )
-        )
+        ),
+        actions: [
+          IconButton(onPressed: prevSurah, icon: const Icon(Icons.chevron_left)),
+          IconButton(onPressed: nextSurah, icon: const Icon(Icons.chevron_right)),
+        ],
+        elevation: 0,
+        centerTitle: true,
+      ),
+      body: _surah != null?Column(
+          children: [
+            Expanded(
+                child: ListView.separated(
+                  itemCount: _surah.ayats.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    Ayat ayat = _surah.ayats[index];
+                    return InkWell(
+                              onTap: (){},
+                              child: Column(
+                                  children: [
+                                    Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 15.00,
+                                            horizontal: 15.00
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                                width: 30,
+                                                child: Text(Utils.toBNNumber(ayat.ayat_no), style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),)
+                                            ),
+                                            Expanded(
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                        width: double.infinity,
+                                                        child:Text(ayat.text_ar,
+                                                          textAlign: TextAlign.right,
+                                                          style: TextStyle(
+                                                              color: Theme.of(context).primaryColor,
+                                                              fontSize: 24,
+                                                              fontFamily: "Al-Qalam Quran"
+                                                          ),
+                                                        )
+                                                    ),
+                                                    SizedBox(
+                                                        width: double.infinity,
+                                                        child: Text(
+                                                          ayat.text_bn,
+                                                          style: const TextStyle(
+                                                              color: Colors.black,
+                                                              fontSize: 18,
+                                                              fontFamily: "Kalpurush"
+                                                          ),
+                                                        )
+                                                    ),
+
+                                                  ],
+                                                )
+                                            )
+                                          ],
+                                        )
+                                    ),
+                                  ]
+                              ),
+                            );
+                  },
+                  separatorBuilder: (BuildContext context, index){
+                    return Container(
+                      margin: const EdgeInsets.only(left: 15, right: 15),
+                      height: 1,
+                      width: double.infinity,
+                      color: Colors.grey.withOpacity(0.3),
+                    );
+                  },
+                )
+            )
+          ]
+      ):const Text("Nothing to show"),
     );
   }
 }
