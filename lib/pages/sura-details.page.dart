@@ -15,10 +15,10 @@ class SurahDetailsPage extends StatefulWidget {
 }
 
 class _SurahDetailsPageState extends State<SurahDetailsPage> {
-  String _surah_no = "";
+  String _surahNo = "";
   List<Surah> _surahs = [];
   late Surah  _surah;
-  final YoutubePlayerController _video_controller = YoutubePlayerController(
+  final YoutubePlayerController _videoController = YoutubePlayerController(
     params: const YoutubePlayerParams(
       mute: false,
       showControls: false,
@@ -37,29 +37,29 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
 
   void changeSurah(String surahNo){
     setState(() {
-      _surah_no = surahNo;
-      _surah = _surahs.firstWhere((element) => element.no == _surah_no);
+      _surahNo = surahNo;
+      _surah = _surahs.firstWhere((element) => element.no == _surahNo);
       if(_surah.videos.isNotEmpty) {
         if (_isVideoVisible) {
-          _video_controller.loadVideoById(videoId: _surah.videos[0].yt_video_id).then((value) => _video_controller.playVideo());
-          _video_controller.playVideo();
+          _videoController.loadVideoById(videoId: _surah.videos[0].yt_video_id).then((value) => _videoController.playVideo());
+          _videoController.playVideo();
         } else {
-          _video_controller.loadVideoById(videoId: _surah.videos[0].yt_video_id).then((value) => _video_controller.pauseVideo());
+          _videoController.loadVideoById(videoId: _surah.videos[0].yt_video_id).then((value) => _videoController.pauseVideo());
         }
       } else {
-        _video_controller.close();
+        _videoController.pauseVideo();
       }
 
     });
   }
   nextSurah(){
-    int next = int.parse(_surah_no) + 1;
+    int next = int.parse(_surahNo) + 1;
     if(next <= _surahs.length) {
       changeSurah(next.toString());
     }
   }
   prevSurah(){
-    int prev = int.parse(_surah_no) -1;
+    int prev = int.parse(_surahNo) -1;
     if(prev >= 1) {
       changeSurah(prev.toString());
     }
@@ -78,7 +78,6 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
 
   @override
   void dispose() {
-    _video_controller.close();
     super.dispose();
   }
 
@@ -91,7 +90,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
             child: DropdownButton(
                 iconEnabledColor: Colors.white,
                 iconDisabledColor: Colors.grey,
-                value: _surah_no,
+                value: _surahNo,
                 onChanged: (value) {
                   changeSurah(value.toString());
                 },
@@ -147,12 +146,12 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
               height: _isVideoVisible? ((MediaQuery.of(context).size.width / 16)*9) + 50 : 0,
               width: double.infinity,
               color: Colors.red,
-              child: VideoPlayer(controller: _video_controller, videos: _surah.videos),
+              child: VideoPlayer(controller: _videoController, videos: _surah.videos),
               onEnd: (){
                 if(_isVideoVisible){
-                  _video_controller.playVideo();
+                  _videoController.playVideo();
                 } else{
-                  _video_controller.pauseVideo();
+                  _videoController.pauseVideo();
                 }
 
               },
@@ -232,7 +231,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                           height: 25,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(30),
                                 bottomRight: Radius.circular(30)
                             ),

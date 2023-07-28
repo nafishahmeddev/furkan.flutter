@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furkan_flutter/bloc/cubut/app_cubit.dart';
 import 'package:furkan_flutter/models/surah.model.dart';
 import 'package:furkan_flutter/pages/surah-list.page.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
@@ -46,7 +47,9 @@ class _SplashPageState extends State<SplashPage> {
       });
     });
     if(fileExists && ! await _checkForUpdate()){
+      Timer(const Duration(seconds: 2),(){
         _updateAppState();
+      });
 
     } else {
       try {
@@ -112,7 +115,7 @@ class _SplashPageState extends State<SplashPage> {
                   height: 100,
                   child: Column(
                     children: [
-                      const Text("Furkan", style: TextStyle(color: Colors.white, fontSize: 26),),
+                       Text("ফুরকান", style: TextStyle(color: Colors.white, fontFamily: GoogleFonts.galada().fontFamily, fontSize: 25),),
                       Container(
                           width: 90,
                           margin: const EdgeInsets.only(top:20),
