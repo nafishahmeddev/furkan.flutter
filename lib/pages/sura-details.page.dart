@@ -5,6 +5,7 @@ import 'package:furkan_flutter/models/ayat.model.dart';
 import 'package:furkan_flutter/models/surah.model.dart';
 import 'package:furkan_flutter/utils/utils.dart';
 import 'package:furkan_flutter/widgets/video_player.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 class SurahDetailsPage extends StatefulWidget {
   const SurahDetailsPage({Key? key, required this.surah_no}) : super(key: key);
@@ -20,8 +21,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
   final YoutubePlayerController _video_controller = YoutubePlayerController(
     params: const YoutubePlayerParams(
       mute: false,
-      showControls: true,
-      showFullscreenButton: true,
+      showControls: false,
     ),
   );
   bool _isVideoVisible = true;
@@ -69,10 +69,8 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
     setState(() {
       if(_isVideoVisible){
         _isVideoVisible = false;
-        _video_controller.playVideo();
       } else {
         _isVideoVisible = true;
-        _video_controller.pauseVideo();
       }
     });
 
@@ -104,9 +102,11 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                       child: SizedBox(
                           child: Text(
                             "${Utils.toBNNumber(_surah.no)}. ${_surah.name_bn}",
-                            style: const TextStyle(
+                            style:  TextStyle(
                                 color: Colors.white,
-                                fontFamily: "Kalpurush"
+                                fontFamily: GoogleFonts.notoSerifBengali().fontFamily,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18
                             ),
                             overflow: TextOverflow.ellipsis,
                           )
@@ -121,8 +121,8 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                         child: Text(
                           "${Utils.toBNNumber(surah.no)}. ${surah.name_bn}",
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              fontFamily: "Kalpurush"
+                          style:  TextStyle(
+                              fontFamily: GoogleFonts.notoSerifBengali().fontFamily
                           ),
                         )
                     ),
@@ -136,74 +136,118 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
           IconButton(onPressed: nextSurah, icon: const Icon(Icons.chevron_right)),
         ],
         elevation: 0,
-        centerTitle: true,
+        // centerTitle: true,
       ),
       body: _surah != null?Column(
           children: [
-            VideoPlayer(controller: _video_controller, videos: _surah.videos),
-            Expanded(
-                child: ListView.separated(
-                  itemCount: _surah.ayats.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    Ayat ayat = _surah.ayats[index];
-                    return Column(
-                        children: [
-                          Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 15.00,
-                                  horizontal: 15.00
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                      width: 30,
-                                      child: Text(Utils.toBNNumber(ayat.ayat_no), style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),)
-                                  ),
-                                  Expanded(
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                              width: double.infinity,
-                                              child:Text(ayat.text_ar,
-                                                textAlign: TextAlign.right,
-                                                style: TextStyle(
-                                                    color: Theme.of(context).primaryColor,
-                                                    fontSize: 24,
-                                                    fontFamily: "Al-Qalam Quran"
-                                                ),
-                                              )
-                                          ),
-                                          SizedBox(
-                                              width: double.infinity,
-                                              child: Text(
-                                                ayat.text_bn,
-                                                style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 18,
-                                                    fontFamily: "Kalpurush"
-                                                ),
-                                              )
-                                          ),
+            AnimatedContainer (
+              clipBehavior: Clip.hardEdge,
+              duration: const Duration (milliseconds: 400),
+              curve: Curves.fastOutSlowIn,
+              height: _isVideoVisible? ((MediaQuery.of(context).size.width / 16)*9) + 50 : 0,
+              width: double.infinity,
+              color: Colors.red,
+              child: VideoPlayer(controller: _video_controller, videos: _surah.videos),
+              onEnd: (){
+                if(_isVideoVisible){
+                  _video_controller.playVideo();
+                } else{
+                  _video_controller.pauseVideo();
+                }
 
-                                        ],
+              },
+            ),
+            Expanded(
+                child: Stack(
+                  children: [
+                    ListView.separated(
+                      itemCount: _surah.ayats.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        Ayat ayat = _surah.ayats[index];
+                        return Column(
+                            children: [
+                              Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 15.00,
+                                      horizontal: 15.00
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                          width: 30,
+                                          child: Text(Utils.toBNNumber(ayat.ayat_no), style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),)
+                                      ),
+                                      Expanded(
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                  width: double.infinity,
+                                                  child:Text(ayat.text_ar,
+                                                    textAlign: TextAlign.right,
+                                                    style: TextStyle(
+                                                        color: Theme.of(context).primaryColor,
+                                                        fontSize: 24,
+                                                        fontFamily: GoogleFonts.amiriQuran().fontFamily//"Al-Qalam Quran"
+                                                    ),
+                                                  )
+                                              ),
+                                              const SizedBox(height: 20,),
+                                              SizedBox(
+                                                  width: double.infinity,
+                                                  child: Text(
+                                                    ayat.text_bn,
+                                                    style:  TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 18,
+                                                        fontFamily: GoogleFonts.notoSerifBengali().fontFamily
+                                                    ),
+                                                  )
+                                              ),
+
+                                            ],
+                                          )
                                       )
+                                    ],
                                   )
-                                ],
-                              )
+                              ),
+                            ]
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, index){
+                        return Container(
+                          margin: const EdgeInsets.only(left: 15, right: 15),
+                          height: 1,
+                          width: double.infinity,
+                          color: Colors.grey.withOpacity(0.3),
+                        );
+                      },
+                    ),
+                    Positioned(
+                        left: (MediaQuery.of(context).size.width/2) - 25,
+                        top: 0,
+                        child: Container(
+                          width: 50,
+                          height: 25,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(30),
+                                bottomRight: Radius.circular(30)
+                            ),
+                            border: Border.all(
+                              width: 1,
+                              color: Colors.grey.withOpacity(0.2)
+                            )
                           ),
-                        ]
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, index){
-                    return Container(
-                      margin: const EdgeInsets.only(left: 15, right: 15),
-                      height: 1,
-                      width: double.infinity,
-                      color: Colors.grey.withOpacity(0.3),
-                    );
-                  },
+                          child: InkWell(
+                          onTap: toggleVideo,
+                          child:  Icon(_isVideoVisible ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+                        )
+                        )
+                    )
+                  ],
                 )
             )
           ]

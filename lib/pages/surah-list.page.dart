@@ -7,6 +7,7 @@ import 'package:furkan_flutter/models/surah.model.dart';
 import 'package:furkan_flutter/pages/sura-details.page.dart';
 import 'package:furkan_flutter/theme/colors.dart';
 import 'package:furkan_flutter/utils/utils.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SurahListPage extends StatelessWidget {
   const SurahListPage({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class SurahListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("F U R K A N", style: TextStyle(color: Colors.white),),
+        title:  Text("ফুরকান", style: TextStyle(color: Colors.white, fontFamily: GoogleFonts.galada().fontFamily, fontSize: 25),),
         centerTitle: true,
       ),
       body: BlocBuilder<AppCubit, AppState>(
@@ -30,20 +31,17 @@ class SurahListPage extends StatelessWidget {
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>SurahDetailsPage(surah_no: surah.no)));
                 },
-                leading: Container(
-                    width: 24,
-                    height: 24,
-                    margin: const EdgeInsets.only(right: 15),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(color: ThemePrimaryColor[400], borderRadius: BorderRadius.circular(15)),
-                    child: Text(Utils.toBNNumber(surah.no), style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),)
+                leading: CircleAvatar(
+                    radius: 18,
+                    backgroundColor: Colors.amber,
+                    child: Text(Utils.toBNNumber(surah.no), style:  TextStyle( fontSize: 12, fontWeight: FontWeight.bold,fontFamily: GoogleFonts.tiroBangla().fontFamily),)
                 ),
                 title: Text(
                   surah.name_bn,
-                  style: const TextStyle(
+                  style:  TextStyle(
                       color: Colors.black,
                       fontSize: 20 ,
-                      fontFamily: "Kalpurush"
+                      fontFamily: GoogleFonts.notoSerifBengali().fontFamily
                   ),
                 ),
                 subtitle:Text("${surah.total_ayats} আয়াত", style: const TextStyle(fontSize: 11)),
@@ -52,14 +50,15 @@ class SurahListPage extends StatelessWidget {
                   style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontSize: 24,
-                      fontFamily: "Al-Qalam Quran"
+                      fontFamily:GoogleFonts.amiriQuran().fontFamily,// "Al-Qalam Quran",
+                      fontWeight: FontWeight.w100
                   ),
                 ),
               );
             },
             separatorBuilder: (BuildContext context, index){
               return Container(
-                margin: const EdgeInsets.only(left: 60, right: 15),
+                margin: const EdgeInsets.only(left: 80, right: 15),
                 height: 1,
                 width: double.infinity,
                 color: Colors.grey.withOpacity(0.3),
