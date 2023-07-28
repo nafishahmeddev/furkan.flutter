@@ -54,7 +54,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
   }
   nextSurah(){
     int next = int.parse(_surah_no) + 1;
-    if(next <= 214) {
+    if(next <= _surahs.length) {
       changeSurah(next.toString());
     }
   }
