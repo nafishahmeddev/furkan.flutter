@@ -41,13 +41,10 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
       _surah = _surahs.firstWhere((element) => element.no == _surah_no);
       if(_surah.videos.isNotEmpty) {
         if (_isVideoVisible) {
-          _video_controller.loadVideoById(
-              videoId: _surah.videos[0].yt_video_id);
+          _video_controller.loadVideoById(videoId: _surah.videos[0].yt_video_id).then((value) => _video_controller.playVideo());
           _video_controller.playVideo();
         } else {
-          _video_controller.loadVideoById(
-              videoId: _surah.videos[0].yt_video_id);
-          _video_controller.pauseVideo();
+          _video_controller.loadVideoById(videoId: _surah.videos[0].yt_video_id).then((value) => _video_controller.pauseVideo());
         }
       } else {
         _video_controller.close();
