@@ -80,7 +80,7 @@ class _VideoPlayer extends State<VideoPlayer>{
                   height: 50,
 
                   clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                   ),
                   child:DropdownButtonHideUnderline(
