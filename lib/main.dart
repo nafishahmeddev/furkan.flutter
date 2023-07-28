@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:furkan_flutter/bloc/cubut/app_cubit.dart';
+import 'package:furkan_flutter/pages/main_screen.dart';
 import 'package:furkan_flutter/pages/splash.page.dart';
 import 'package:furkan_flutter/theme/colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 class MyHttpOverrides extends HttpOverrides{
   @override
   HttpClient createHttpClient(SecurityContext? context){
@@ -18,19 +21,21 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return BlocProvider(
+      create: (_) => AppCubit(),
+      child: MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: ThemePrimaryColor),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 242, 234, 216),
-        appBarTheme: AppBarTheme(
-          //backgroundColor: ThemePrimaryColor,
-          color: ThemePrimaryColor
-        ),
-        useMaterial3: true
+          colorScheme: ColorScheme.fromSeed(seedColor: ThemePrimaryColor),
+          scaffoldBackgroundColor: const Color.fromARGB(255, 242, 234, 216),
+          appBarTheme: AppBarTheme(
+              color: ThemePrimaryColor
+          ),
+          useMaterial3: true
       ),
       themeMode: ThemeMode.system,
-      home: const SplashPage(),
+      home: const MainScreen()
+      ),
     );
   }
 }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furkan_flutter/bloc/cubut/app_cubit.dart';
 import 'package:furkan_flutter/models/ayat.model.dart';
 import 'package:furkan_flutter/models/surah.model.dart';
 import 'package:furkan_flutter/utils/utils.dart';
 import 'package:furkan_flutter/widgets/video_player.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 class SurahDetailsPage extends StatefulWidget {
-  const SurahDetailsPage({Key? key, required this.surah_no, required this.surahs}) : super(key: key);
+  const SurahDetailsPage({Key? key, required this.surah_no}) : super(key: key);
   final String surah_no;
-  final List<Surah> surahs;
   @override
   State<SurahDetailsPage> createState() => _SurahDetailsPageState();
 }
@@ -27,8 +28,9 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
   @override
   void initState() {
     super.initState();
+    AppCubit cubit = context.read<AppCubit>();
     setState((){
-      _surahs = widget.surahs;
+      _surahs = cubit.state.surahs!;
       changeSurah(widget.surah_no);
     });
   }
@@ -81,7 +83,6 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _video_controller.close();
     super.dispose();
   }
@@ -149,54 +150,54 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                   itemBuilder: (BuildContext context, int index) {
                     Ayat ayat = _surah.ayats[index];
                     return Column(
-                                  children: [
-                                    Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 15.00,
-                                            horizontal: 15.00
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                                width: 30,
-                                                child: Text(Utils.toBNNumber(ayat.ayat_no), style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),)
-                                            ),
-                                            Expanded(
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(
-                                                        width: double.infinity,
-                                                        child:Text(ayat.text_ar,
-                                                          textAlign: TextAlign.right,
-                                                          style: TextStyle(
-                                                              color: Theme.of(context).primaryColor,
-                                                              fontSize: 24,
-                                                              fontFamily: "Al-Qalam Quran"
-                                                          ),
-                                                        )
-                                                    ),
-                                                    SizedBox(
-                                                        width: double.infinity,
-                                                        child: Text(
-                                                          ayat.text_bn,
-                                                          style: const TextStyle(
-                                                              color: Colors.black,
-                                                              fontSize: 18,
-                                                              fontFamily: "Kalpurush"
-                                                          ),
-                                                        )
-                                                    ),
+                        children: [
+                          Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 15.00,
+                                  horizontal: 15.00
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                      width: 30,
+                                      child: Text(Utils.toBNNumber(ayat.ayat_no), style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),)
+                                  ),
+                                  Expanded(
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                              width: double.infinity,
+                                              child:Text(ayat.text_ar,
+                                                textAlign: TextAlign.right,
+                                                style: TextStyle(
+                                                    color: Theme.of(context).primaryColor,
+                                                    fontSize: 24,
+                                                    fontFamily: "Al-Qalam Quran"
+                                                ),
+                                              )
+                                          ),
+                                          SizedBox(
+                                              width: double.infinity,
+                                              child: Text(
+                                                ayat.text_bn,
+                                                style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 18,
+                                                    fontFamily: "Kalpurush"
+                                                ),
+                                              )
+                                          ),
 
-                                                  ],
-                                                )
-                                            )
-                                          ],
-                                        )
-                                    ),
-                                  ]
-                              );
+                                        ],
+                                      )
+                                  )
+                                ],
+                              )
+                          ),
+                        ]
+                    );
                   },
                   separatorBuilder: (BuildContext context, index){
                     return Container(

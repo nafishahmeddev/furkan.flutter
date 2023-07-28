@@ -1,7 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furkan_flutter/bloc/cubut/app_cubit.dart';
+import 'package:furkan_flutter/models/surah.model.dart';
 import 'package:furkan_flutter/pages/surah-list.page.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -42,9 +46,7 @@ class _SplashPageState extends State<SplashPage> {
       });
     });
     if(fileExists && ! await _checkForUpdate()){
-      Timer.periodic(const Duration(seconds: 3), (timer) {
-        _gotoListing();
-      });
+        _updateAppState();
 
     } else {
       try {
@@ -72,15 +74,23 @@ class _SplashPageState extends State<SplashPage> {
       }).onDone(() async {
         final file = File(filePath);
         await file.writeAsBytes(bytes);
-        _gotoListing();
+        _updateAppState();
       });
     }
   }
-  _gotoListing(){
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const SurahListPage()),
-    );
+  Future<void> _updateAppState() async {
+    AppCubit cubit  = context.read<AppCubit>();
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    String filePath = "$dir/resources.json";
+    final file = File(filePath);
+    Map<String, dynamic> data = jsonDecode(await file.readAsStringSync());
+    List<Surah> surahs = List<Surah>.from(data["surahs"].map((dynamic json){
+      Map<String, dynamic> surah = Map<String, dynamic>.from(json);
+      surah["ayats"] = data["ayats"][surah["no"]];
+      return Surah.fromJson(surah);
+    }));
+
+    cubit.setSurahs(surahs);
   }
 
 
@@ -98,18 +108,18 @@ class _SplashPageState extends State<SplashPage> {
           color: Theme.of(context).primaryColor,
           child: Center(
               child: Container(
-                alignment: Alignment.center,
-                height: 100,
-                child: Column(
-                  children: [
-                    const Text("Furkan", style: TextStyle(color: Colors.white, fontSize: 26),),
-                    Container(
-                        width: 90,
-                        margin: const EdgeInsets.only(top:20),
-                        child:  LinearProgressIndicator(color: Colors.white,  value: _percentage, backgroundColor: Colors.transparent,)
-                    ),
-                  ],
-                )
+                  alignment: Alignment.center,
+                  height: 100,
+                  child: Column(
+                    children: [
+                      const Text("Furkan", style: TextStyle(color: Colors.white, fontSize: 26),),
+                      Container(
+                          width: 90,
+                          margin: const EdgeInsets.only(top:20),
+                          child:  LinearProgressIndicator(color: Colors.white,  value: _percentage, backgroundColor: Colors.transparent,)
+                      ),
+                    ],
+                  )
               )
           ),
         )
