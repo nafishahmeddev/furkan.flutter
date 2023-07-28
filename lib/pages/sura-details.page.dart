@@ -174,10 +174,27 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(
-                                          width: 30,
-                                          child: Text(Utils.toBNNumber(ayat.ayat_no), style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),)
-                                      ),
+                                      Column(
+                                        children: [
+                                          index == 0 ? Padding(
+                                              padding: EdgeInsets.only(bottom: 5),
+                                            child: CircleAvatar(
+                                                radius: 15,
+                                                backgroundImage :const AssetImage("assets/images/sura_background.png"),
+                                                backgroundColor: Colors.transparent,
+                                                child: Text(Utils.toBNNumber(_surahNo), style: const TextStyle( fontWeight: FontWeight.w600, fontSize: 12),)
+                                            ),
+                                          ) : SizedBox(),
+                                          CircleAvatar(
+                                              radius: 15,
+                                              backgroundImage :const AssetImage("assets/images/ayat_background.png"),
+                                              backgroundColor: Colors.transparent,
+                                              child: Text(Utils.toBNNumber(ayat.ayat_no), style: const TextStyle( fontWeight: FontWeight.w600, fontSize: 12),)
+                                          )
+                                        ],
+                                      )
+                                      ,
+                                      const SizedBox(width: 15,),
                                       Expanded(
                                           child: Column(
                                             children: [

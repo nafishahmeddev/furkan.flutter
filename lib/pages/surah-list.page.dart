@@ -32,9 +32,10 @@ class SurahListPage extends StatelessWidget {
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>SurahDetailsPage(surah_no: surah.no)));
                 },
                 leading: CircleAvatar(
-                    radius: 18,
-                    backgroundColor: Colors.amber,
-                    child: Text(Utils.toBNNumber(surah.no), style:  TextStyle( fontSize: 12, fontWeight: FontWeight.bold,fontFamily: GoogleFonts.tiroBangla().fontFamily),)
+                    radius: 16,
+                    backgroundImage :AssetImage("assets/images/sura_background.png"),
+                    backgroundColor: Colors.transparent,
+                    child: Text(Utils.toBNNumber(surah.no), style:  TextStyle( fontSize: 11, fontWeight: FontWeight.bold,fontFamily: GoogleFonts.tiroBangla().fontFamily),)
                 ),
                 title: Text(
                   surah.name_bn,
